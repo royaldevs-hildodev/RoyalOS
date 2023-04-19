@@ -13,7 +13,7 @@ Para contribuir com o projeto, você deve criar um fork do repositório. Para is
 Depois de criar o fork do repositório, você deve cloná-lo na sua máquina local. Para isso, abra o terminal ou prompt de comando e execute o seguinte comando:
 
 ```bash
-git clone <URL>
+git clone https://github.com/royaldevs-hildodev/RoyalOS.git
 ```
 
 3. Crie uma branch para a sua contribuição
