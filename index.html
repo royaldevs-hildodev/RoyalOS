@@ -5,12 +5,20 @@
 	<title>RoyalOS</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
+		:root {
+			--primary: #6c5ce7;
+		}
+
 		body {
-			background-color: #0078D7;
+			background-color: var(--primary);
 			font-family: "Segoe UI", sans-serif;
 			margin: 0;
 			padding: 0;
 			overflow: hidden;
+			background-image: url(https://cdn.discordapp.com/attachments/1093649058591150080/1099732421760528394/2.png);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
 		}
 
 		a {
@@ -36,8 +44,8 @@
 			background-color: #FFF;
 			border-radius: 5px;
 			box-shadow: 0px 0px 5px #888888;
-			width: 200px;
-			height: 200px;
+			width: 100px;
+			height: 100px;
 			margin: 10px;
 			transition: transform .2s;
 		}
@@ -49,15 +57,6 @@
 
 		.tile img {
 			max-width: 50%;
-			margin-bottom: 10px;
-		}
-
-		.tile p {
-			font-size: 1.2em;
-			font-weight: bold;
-			text-align: center;
-			margin: 0;
-			padding: 0;
 		}
 
 		.taskbar {
@@ -76,17 +75,15 @@
 		.start-menu {
 			display: flex;
 			align-items: center;
+			transition: transform .2s;
 		}
 
 		.start-menu img {
 			height: 20px;
-			margin-right: 10px;
 		}
 
-		.start-menu p {
-			font-size: 1.2em;
-			margin: 0;
-			padding: 0;
+		.start-menu:hover {
+			transform: scale(1.5);
 		}
 
 		.programs {
@@ -106,7 +103,7 @@
 		}
 
 		.program:hover {
-			transform: scale(1.1);
+			transform: scale(1.5);
 		}
 
 		.program img {
@@ -121,7 +118,7 @@
 		}
 
 		.clock {
-			font-size: 1.5em;
+			font-size: 1em;
 			font-weight: bold;
 		}
 
@@ -213,46 +210,29 @@
 
 <body>
 	<div class="container">
-		<div class="tile" onclick="showIframe('http://www.google.com/custom?q=&btnG=Search')">
+		<div class="tile" onclick="showIframe({title: 'Google Chrome', url: 'https://google.com/search'})">
 			<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/768px-Google_Chrome_icon_%28September_2014%29.svg.png"
 				alt="Google Chrome">
-			<p>Google Chrome</p>
+
 		</div>
-		<div class="tile">
+		<div class="tile" onclick="showIframe({title: 'Explorador', url: 'https://tinyfilemanager.github.io/demo/'})">
 			<img src="https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png"
 				alt="Explorador de arquivos">
-			<p>Explorador de Arquivos</p>
+
 		</div>
-		<div class="tile">
-			<img src="https://i.imgur.com/CEPmEjt.png" alt="Calculadora">
-			<p>Calculadora</p>
-		</div>
-		<div class="tile">
-			<img src="https://i.imgur.com/Lck7VhC.png" alt="Settings">
-			<p>Settings</p>
-		</div>
-		<div class="tile">
-			<img src="https://i.imgur.com/9zX6fpt.png" alt="Photos">
-			<p>Photos</p>
-		</div>
-		<div class="tile">
-			<img src="https://i.imgur.com/NkXd0Jv.png" alt="Mail">
-			<p>Mail</p>
+		<div class="tile"
+			onclick="showIframe({title: 'Calculadora', url: 'https://www.online-calculator.com/full-screen-calculator/'})">
+			<img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Windows_Calculator_icon.png?20220430105225"
+				alt="Calculadora">
 		</div>
 	</div>
 	<div class="taskbar">
 		<div class="start-menu">
-			<img src="https://i.imgur.com/MvZrPnP.png" alt="Logo do Windows">
-			<p>Start</p>
+			<img src="https://cdn.discordapp.com/attachments/1093649058591150080/1099732102523670659/icon-os.png" alt="RoyalOS logo">
 		</div>
 		<div class="programs">
 			<div class="program">
-				<img src="https://i.imgur.com/8nTpYqB.png" alt="Microsoft Edge">
-				<p>Microsoft Edge</p>
-			</div>
-			<div class="program">
-				<img src="https://i.imgur.com/pFvXMe8.png" alt="File Explorer">
-				<p>File Explorer</p>
+				<img src="https://cdn.discordapp.com/attachments/1093649058591150080/1099733004236095588/Apps-menuy.png" alt="Apps-menu">
 			</div>
 		</div>
 		<div class="clock">
@@ -260,9 +240,9 @@
 		</div>
 	</div>
 
-	<div id="myModal" class="modal">
+	<div id="window-popup" class="modal">
 		<div class="modal-header">
-			<div class="modal-title">Google Chrome</div>
+			<div class="modal-title" id="modalTitle"></div>
 			<div class="modal-controls">
 				<button class="modal-minimize">_</button>
 				<button class="modal-maximize">&#9633;</button>
@@ -270,6 +250,7 @@
 			</div>
 		</div>
 		<div class="modal-content">
+			<div id="htmlContent"></div>
 			<iframe src="" id="iframeURL" frameborder="0" style="width: 100%; height: 100%;"></iframe>
 		</div>
 	</div>
@@ -277,7 +258,7 @@
 	<script>
 		// função ao iniciar a pagina
 
-		const modal = document.getElementById("myModal");
+		const modal = document.getElementById("window-popup");
 		const span = document.getElementsByClassName("modal-close")[0];
 
 		const minimizeBtn = document.getElementsByClassName("modal-minimize")[0];
@@ -321,10 +302,18 @@
 
 		setInterval(updateTime, 1000);
 
-		// Janela com link
-		function showIframe(url) {
+		// Janela
+		function showIframe({ title = 'Sem título', url = '', html = '' }) {
+			const iframe = document.getElementById("iframeURL")
 			modal.style.display = "block";
-			document.getElementById("iframeURL").url = url
+			document.getElementById("modalTitle").innerText = title
+			if (html !== '') {
+				document.getElementById("htmlContent").innerHTML = html;
+				iframe.display = 'none';
+			} else {
+				iframe.display = 'block';
+				iframe.src = url
+			}
 		}
 	</script>
 
