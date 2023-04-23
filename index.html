@@ -310,7 +310,6 @@
 		// Janela
 		function showIframe({ title = 'Sem título', url = '', html = '' }) {
 			const iframe = document.getElementById("iframeURL")
-			modal.style.display = "block";
 			document.getElementById("modalTitle").innerText = title
 			if (html !== '') {
 				document.getElementById("htmlContent").innerHTML = html;
@@ -319,6 +318,7 @@
 				iframe.display = 'block';
 				iframe.src = url
 			}
+			modal.style.display = "block";
 		}
 	</script>
 
